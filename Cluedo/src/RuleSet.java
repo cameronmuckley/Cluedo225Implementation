@@ -101,12 +101,38 @@ public class RuleSet
   public boolean isGamewon() {
 	  return gameWon;
   }
+  
+  public void setGamewon() {
+	  gameWon = true;
+  }
 
   public void setNumPlayers(int i) {
 	  numberPlayers = i;
   }
+  
+  public Boolean playerAccChoice() {
+	  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	  try {
+		String s = br.readLine();
+		for(char c : s.toCharArray()) {
+			if(java.lang.Character.isDigit(c)) {
+				System.out.println("Invalid input, try again.");
+				return playerAccChoice();
+			}
+		}
+		if(s.equals("YES") ||s.equals("Yes") || s.equals("yes")) {
+			return true;
+		}
+		if(s.equals("NO") ||s.equals("No") || s.equals("no")) {
+			return true;
+		}
+	  }catch (IOException e) {
+			e.printStackTrace();
+		  }
+	  return false;
+  }
 
-  public List<Card> makeSuggestion(List<Player> players, List<Card> envelope, Room room) {
+  public List<Card> makeSuggestion(List<Player> players, Room room) {
 	  List<Card> suggestion = new ArrayList<Card>();
 	  // ask the player to nominate a weapon and killer from the room they are in.
 	  System.out.println("Player "+ playersTurn + " is in the " + room.getName() + ".");
@@ -152,12 +178,63 @@ public class RuleSet
 				System.out.println("Invalid suspect, try again.");
 			}
 		}
+		for(Player p : players) {
+			for(Card c : p.getHand()) {
+				if(room.getName().equals(c.getName())) {
+					System.out.println("Player " + p.getNumber() + " refutes the Room Decision");
+				}
+			}
+		}
 	  }
+	  
 	  catch (IOException e) {
 			e.printStackTrace();
 	  }
 
 	  // return suggestion packet.
 	  return suggestion;
+  }
+  public List<Card> makeAccusation(List<Player> players, Room room) {
+	  List<Card> accusation = new ArrayList<Card>();
+	  // ask the player to nominate a weapon and killer from the room they are in.
+	  System.out.println("Player "+ playersTurn + " is in the " + room.getName() + ".");
+	  // room is added to suggestion pile
+	  accusation.add(room);
+	  System.out.println("What was the murder weapon? (Dagger, Revolver, Lead Pipe, Rope, Spanner, Candlestick.)");
+	  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	  try {
+		Card weapon = null;
+		while(weapon == null) {
+			String s = br.readLine();
+			if(s.equals("Dagger") || s.equals("Revolver") || s.equals("Lead Pipe") || s.equals("Rope") || s.equals("Spanner") || s.equals("Candlestick")) {
+				weapon = new Weapon(s);
+				accusation.add(weapon);
+			}
+			else {
+				System.out.println("Invalid weapon, try again.");
+			}
+		}
+		Card roomCard = null;
+		roomCard = room;
+		accusation.add(roomCard);
+		System.out.println("Who was the killer? (Mr Green, Professor Plum, Mrs White, Mrs Peacock, Miss Scarlet, Colonel Mustard");
+		Card killer = null;
+		while(killer == null) {
+			String s = br.readLine();
+			if(s.equals("Mr Green") || s.equals("Professor Plum") || s.equals("Mrs White") || s.equals("Mrs Peacock") || s.equals("Miss Scarlet") || s.equals("Colonel Mustard")) {
+				killer = new CluedoCharacter(s, 'x');
+				accusation.add(killer);
+			}
+			else {
+				System.out.println("Invalid suspect, try again.");
+			}
+		}
+	  }
+	  catch (IOException e) {
+			e.printStackTrace();
+	  }
+
+	  // return suggestion packet.
+	  return accusation;
   }
 }

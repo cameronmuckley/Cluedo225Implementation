@@ -130,6 +130,11 @@ public class CluedoGame
 	  // now that we have players, cards in hands, a board and murder circumstances, begin the main game loop.
 	  // MAIN GAME LOOP
 	  while(!rules.isGamewon()) {
+		  String murderAnswer = "";
+		  for(Card mur : murderEnvelope) {
+			  murderAnswer += mur.getName();
+		  }
+		  System.out.println(murderAnswer);
 		  board.draw(players);
 		  // start current turn
 		  // TODO can player move
@@ -150,18 +155,22 @@ public class CluedoGame
 			  //TODO check if character is in a room
 			  for(Room r : roomList) {
 				  if(players.get(rules.getTurn()-1).getChar().getCurrentTile() == r.getLetter()) {
-					  rules.makeSuggestion(players,murderEnvelope,r);
+					  System.out.println("Would you like to make an Accusation? If not you will Suggest.");
+					  if(rules.playerAccChoice()) {
+						  if(rules.makeAccusation(players, r).equals(murderEnvelope)){
+							  System.out.println("Player " + players.get(rules.getTurn()-1).getNumber() + " wins!");
+							  rules.setGamewon(); 
+						  }
+					  }
+					  else {
+						  rules.makeSuggestion(players,r);
+					  }
+					  
 					  turnMoves = 1;
 				  }
 			  }
 			  turnMoves--;
 		  }
-		  // if character is in a room, they can make a suggestion.
-		  // make suggestion
-		  // other players refute
-		  // can then try an accusation
-		  // see if game won
-		  // next turn.
 		  try {
 			Thread.sleep(2000);
 		  } catch (InterruptedException e) {
