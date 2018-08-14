@@ -157,9 +157,25 @@ public class CluedoGame
 				  if(players.get(rules.getTurn()-1).getChar().getCurrentTile() == r.getLetter()) {
 					  System.out.println("Would you like to make an Accusation? If not you will Suggest.");
 					  if(rules.playerAccChoice()) {
-						  if(rules.makeAccusation(players, r).equals(murderEnvelope)){
+						  List<Card> accusation = new ArrayList<Card>();
+						  accusation = rules.makeAccusation(players, r);
+						  int winCount = 0;
+						  int envCount = 0;
+						  for(Card winC : accusation) {
+							  System.out.println(envCount + " " + winC.getName());
+							  System.out.println(envCount + " " + murderEnvelope.get(envCount).getName());
+							  if(winC.getName().equals(murderEnvelope.get(envCount).getName())) {
+								  winCount++;
+							  }
+							  envCount++;
+						  }
+						  if(winCount == 3) {
 							  System.out.println("Player " + players.get(rules.getTurn()-1).getNumber() + " wins!");
-							  rules.setGamewon(); 
+							  rules.setGamewon();  
+						  }	  
+						  else {
+							  System.out.println(winCount);
+							  System.out.println("That was wrong!");
 						  }
 					  }
 					  else {
@@ -179,11 +195,6 @@ public class CluedoGame
 		  }
 		  rules.passTurn();
 	  }
-
-
-
-
-
   }
 
 

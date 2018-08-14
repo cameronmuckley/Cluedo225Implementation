@@ -124,7 +124,7 @@ public class RuleSet
 			return true;
 		}
 		if(s.equals("NO") ||s.equals("No") || s.equals("no")) {
-			return true;
+			return false;
 		}
 	  }catch (IOException e) {
 			e.printStackTrace();
@@ -199,7 +199,6 @@ public class RuleSet
 	  // ask the player to nominate a weapon and killer from the room they are in.
 	  System.out.println("Player "+ playersTurn + " is in the " + room.getName() + ".");
 	  // room is added to suggestion pile
-	  accusation.add(room);
 	  System.out.println("What was the murder weapon? (Dagger, Revolver, Lead Pipe, Rope, Spanner, Candlestick.)");
 	  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	  try {
