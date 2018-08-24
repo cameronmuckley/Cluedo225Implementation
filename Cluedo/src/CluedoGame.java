@@ -1,7 +1,9 @@
-	import java.util.*;
+	import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.util.*;
 
 
-public class CluedoGame
+public class CluedoGame extends GUI
 {
 	// game object fields;
 	private Board board;
@@ -135,7 +137,7 @@ public class CluedoGame
 			  murderAnswer += mur.getName();
 		  }
 		  System.out.println(murderAnswer);
-		  board.draw(players);
+		  redraw();
 		  // start current turn
 		  // TODO can player move
 		  System.out.println("It's player "+ rules.getTurn() + ", " + players.get(rules.getTurn()-1).getName() + "'s turn.");
@@ -151,7 +153,6 @@ public class CluedoGame
 			  System.out.println("You have: " + turnMoves + " remaining");
 			  System.out.println("Which direction would you like to go? (UP,DOWN,LEFT,RIGHT)");
 			  board.moveCharacter(players.get(rules.getTurn()-1).getChar(), rules.getDirection());
-			  board.draw(players);
 			  //TODO check if character is in a room
 			  for(Room r : roomList) {
 				  if(players.get(rules.getTurn()-1).getChar().getCurrentTile() == r.getLetter()) {
@@ -197,8 +198,28 @@ public class CluedoGame
 	  }
   }
 
+@Override
+protected void redraw(Graphics g) {
+	board.draw(g,players);	
+}
 
-  public static void main(String[] args) {
+
+
+@Override
+protected void onClick(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+@Override
+protected void onMove(Direction d) {
+	// TODO Auto-generated method stub
+	
+}
+
+public static void main(String[] args) {
 		new CluedoGame();
 	}
 }

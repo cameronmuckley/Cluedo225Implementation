@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.*;
 
 public class Board
@@ -8,6 +10,7 @@ public class Board
   //------------------------
 	private final int BOARD_WIDTH = 26;
 	private final int BOARD_HEIGHT = 27;
+	private final int TILE_SIZE = 10;
 	private char[][] board = new char[BOARD_HEIGHT][BOARD_WIDTH];
 
 	public enum Direction{
@@ -124,7 +127,7 @@ public class Board
 	  }
   }
 
-  public void draw(List<Player> players) {
+  public void draw(Graphics g,List<Player> players) {
 	  List<Character> activeChar = new ArrayList<Character>();
 	  for(Player p : players) {
 		  activeChar.add(p.getChar().getSymbol());
@@ -132,29 +135,34 @@ public class Board
 	  for(int i=0; i < BOARD_HEIGHT; i++) {
 		  for(int j=0; j < BOARD_WIDTH; j++) {
 			  if(board[i][j] == 'p') {
-				  System.out.print(". ");
+				  g.setColor(Color.GRAY);
+				  g.fillRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
+				  g.setColor(Color.BLACK);
+				  g.drawRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
 			  }
 			  else if(board[i][j] == 'x') {
-				  System.out.print("X ");
+				  g.setColor(Color.BLACK);
+				  g.fillRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
 			  }
 			  else if(Character.isDigit(board[i][j])) {
 				  if(activeChar.contains(board[i][j])) {
 					  for(Player p : players) {
 						  if(p.getFromchar(activeChar.get(activeChar.indexOf(board[i][j])))!=null) {
-							  System.out.print(p.getNumber() + " ");
+							  g.setColor(Color.YELLOW);
+							  g.fillRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
+							  g.setColor(Color.BLACK);
+							  g.drawRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
 						  }
 					  }
 				  }
 				  else {
-					  System.out.print(". ");
+					  g.setColor(Color.WHITE);
+					  g.fillRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
+					  g.setColor(Color.BLACK);
+					  g.drawRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
 				  }
 			  }
-			  else {
-				  System.out.print("  ");
-			  }
 		  }
-		  System.out.println("");
 	  }
-	  System.out.println("");
   }
 }
