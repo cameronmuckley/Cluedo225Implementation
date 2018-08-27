@@ -92,14 +92,14 @@ public class CluedoGame extends GUI
 	  }
 
 	  // START GAME
-	  System.out.println("Welcome to Adrian and Cameron's implementation of Cluedo!");
+	  getTextOutputArea().setText("Welcome to Adrian and Cameron's implementation of Cluedo!\n");
 	  // first set number of players
-	  System.out.println("How many of you are playing today? (Input a number between 3-6)");
+	  getTextOutputArea().append("How many of you are playing today? (Input a number between 3-6)\n");
 	  // number of players is set at 0 by default and invalid input returns 0.
 	  while(numPlayers == 0) {
 		  numPlayers = rules.setPlayers();
 	  }
-	  System.out.println("Great, you've selected " + numPlayers + " players.");
+	  getTextOutputArea().setText("Great, you've selected " + numPlayers + " players./n");
 	  rules.setNumPlayers(numPlayers);
 	  // create players character tokens
 	  Stack<Card> tokens = new Stack<Card>();
@@ -115,7 +115,7 @@ public class CluedoGame extends GUI
 	  for(int i = 0; i<numPlayers; i++) {
 		  CluedoCharacter c = (CluedoCharacter) tokens.pop();
 		  players.add(new Player(c.getName(),i+1,c));
-		  System.out.println("Player " + (i+1) + " is " + players.get(i).getName());
+		  getTextOutputArea().append( "Player " + (i+1) + " is " + players.get(i).getName() + "/n");
 	  }
 
 	  // deal cards
@@ -136,47 +136,43 @@ public class CluedoGame extends GUI
 		  for(Card mur : murderEnvelope) {
 			  murderAnswer += mur.getName();
 		  }
-		  System.out.println(murderAnswer);
 		  redraw();
 		  // start current turn
 		  // TODO can player move
-		  System.out.println("It's player "+ rules.getTurn() + ", " + players.get(rules.getTurn()-1).getName() + "'s turn.");
-		  System.out.println("Cards in Player " + rules.getTurn() + "'s hand: " + players.get(rules.getTurn()-1).getHandString());
-		  System.out.println("Rolling dice.....");
+		  getTextOutputArea().setText("It's player "+ rules.getTurn() + ", " + players.get(rules.getTurn()-1).getName() + "'s turn. /n");
+		  getTextOutputArea().append("Cards in Player " + rules.getTurn() + "'s hand: " + players.get(rules.getTurn()-1).getHandString() + "/n");
+		  getTextOutputArea().append("Rolling dice...../n");
 		  die1 = (int) (Math.random()*6)+1;
 		  die2 = (int) (Math.random()*6)+1;
 		  int turnMoves = die1 + die2;
-		  System.out.println("Player " + rules.getTurn() + " rolled " + (turnMoves));
+		  getTextOutputArea().append("Player " + rules.getTurn() + " rolled " + (turnMoves) + "/n");
 
 		  //TODO move character
 		  while(turnMoves != 0) {
-			  System.out.println("You have: " + turnMoves + " remaining");
-			  System.out.println("Which direction would you like to go? (UP,DOWN,LEFT,RIGHT)");
+			  getTextOutputArea().setText("You have: " + turnMoves + " remaining /n");
+			  getTextOutputArea().append("Which direction would you like to go? /n");
 			  board.moveCharacter(players.get(rules.getTurn()-1).getChar(), rules.getDirection());
 			  //TODO check if character is in a room
 			  for(Room r : roomList) {
 				  if(players.get(rules.getTurn()-1).getChar().getCurrentTile() == r.getLetter()) {
-					  System.out.println("Would you like to make an Accusation? If not you will Suggest.");
+					  getTextOutputArea().setText("Would you like to make an Accusation? If not you will Suggest. /n");
 					  if(rules.playerAccChoice()) {
 						  List<Card> accusation = new ArrayList<Card>();
 						  accusation = rules.makeAccusation(players, r);
 						  int winCount = 0;
 						  int envCount = 0;
 						  for(Card winC : accusation) {
-							  System.out.println(envCount + " " + winC.getName());
-							  System.out.println(envCount + " " + murderEnvelope.get(envCount).getName());
 							  if(winC.getName().equals(murderEnvelope.get(envCount).getName())) {
 								  winCount++;
 							  }
 							  envCount++;
 						  }
 						  if(winCount == 3) {
-							  System.out.println("Player " + players.get(rules.getTurn()-1).getNumber() + " wins!");
+							  getTextOutputArea().setText("Player " + players.get(rules.getTurn()-1).getNumber() + " wins! /n");
 							  rules.setGamewon();  
 						  }	  
 						  else {
-							  System.out.println(winCount);
-							  System.out.println("That was wrong!");
+							  getTextOutputArea().setText("That was wrong!");
 						  }
 					  }
 					  else {

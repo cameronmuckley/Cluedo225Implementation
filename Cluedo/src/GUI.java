@@ -1,4 +1,4 @@
-import java.awt.BorderLayout;
+import java.awt.BorderLayout;import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -9,8 +9,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,81 +31,31 @@ import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 
 public abstract class GUI {
-	/**
-	 * defines the different types of movement the user can perform, the
-	 * appropriate one is passed to your code when the move(Move) method is
-	 * called.
-	 */
 	public enum Direction {
 		UP, DOWN, RIGHT, LEFT
 	};
 
-	// these are the methods you need to implement.
-
-	/**
-	 * Is called when the drawing area is redrawn and performs all the logic for
-	 * the actual drawing, which is done with the passed Graphics object.
-	 */
 	protected abstract void redraw(Graphics g);
 
-	/**
-	 * Is called when the mouse is clicked (actually, when the mouse is
-	 * released), and is passed the MouseEvent object for that click.
-	 */
 	protected abstract void onClick(MouseEvent e);
 
-	/**
-	 * Is called whenever a navigation button is pressed. An instance of the
-	 * Move enum is passed, representing the button clicked by the user.
-	 */
 	protected abstract void onMove(Direction d);
 
-	// here are some useful methods you'll need.
-
-	/**
-	 * @return the JTextArea at the bottom of the screen for output.
-	 */
 	public JTextArea getTextOutputArea() {
 		return textOutputArea;
 	}
 
-	/**
-	 * @return the dimensions of the drawing area.
-	 */
 	public Dimension getDrawingAreaDimension() {
 		return drawing.getSize();
 	}
 
-	/**
-	 * Redraws the window (including drawing pane). This is already done
-	 * whenever a button is pressed or the search box is updated, so you
-	 * probably won't need to call this.
-	 */
 	public void redraw() {
 		frame.repaint();
 	}
 
-	// --------------------------------------------------------------------
-	// Everything below here is Swing-related and, while it's worth
-	// understanding, you don't need to look any further to finish the
-	// assignment up to and including completion.
-	// --------------------------------------------------------------------
-
 	private static final int DEFAULT_DRAWING_HEIGHT = 400;
 	private static final int DEFAULT_DRAWING_WIDTH = 400;
 	private static final int TEXT_OUTPUT_ROWS = 5;
-
-	/*
-	 * In Swing, everything is a component; buttons, graphics panes, tool tips,
-	 * and the window frame are all components. This is implemented by
-	 * JComponent, which sits at the top of the component inheritance hierarchy.
-	 * A JFrame is a component that represents the outer window frame (with the
-	 * minimise, maximise, and close buttons) of your program. Every swing
-	 * program has to have one somewhere. JFrames can, of course, have other
-	 * components inside them. JPanels are your bog-standard container component
-	 * (can have other components inside them), that are used for laying out
-	 * your UI.
-	 */
 
 	private JFrame frame;
 
@@ -118,15 +70,6 @@ public abstract class GUI {
 	@SuppressWarnings("serial")
 	private void initialise() {
 
-		/*
-		 * first, we make the buttons etc. that go along the top bar.
-		 */
-
-		// action listeners give you a hook to perform when the button is
-		// pressed. the horrible thing being passed to addActionListener is an
-		// anonymous class, covered in SWEN221. these are useful when working
-		// with swing. the quit button isn't really necessary, as you can just
-		// press the frame's close button, but it serves as a nice example.
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -166,18 +109,6 @@ public abstract class GUI {
 			}
 		});
 
-		/*
-		 * next, make the top bar itself and arrange everything inside of it.
-		 */
-
-		// almost any component (JPanel, JFrame, etc.) that contains other
-		// components inside it needs a LayoutManager to be useful, these do
-		// exactly what you expect. three common LayoutManagers are the BoxLayout,
-		// GridLayout, and BorderLayout. BoxLayout, contrary to its name, places
-		// components in either a row (LINE_AXIS) or a column (PAGE_AXIS).
-		// GridLayout is self-describing. BorderLayout puts a single component
-		// on the north, south, east, and west sides of the outer component, as
-		// well as one in the centre. google for more information.
 		controls = new JPanel();
 		controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
 
@@ -209,10 +140,23 @@ public abstract class GUI {
 		// glue is another invisible component that grows to take up all the
 		// space it can on resize.
 		controls.add(Box.createHorizontalGlue());
-
-		controls.add(new JLabel("Search"));
-		controls.add(Box.createRigidArea(new Dimension(5, 0)));
-
+		
+		/*
+		 * Dice Component
+		 */		
+		JLabel dice1 = new JLabel();
+		BufferedImage wPic = ImageIO.read(this.getClass().getResource("snow.png"));
+		JLabel wIcon = new JLabel(new ImageIcon(wPic));
+		
+		JLabel dice2 = new JLabel();
+		dice2.setText("1");
+		
+		JPanel diceRoll = new JPanel();
+		diceRoll.setMaximumSize(new Dimension(50, 25));
+		diceRoll.setLayout(new GridLayout(1, 2));
+		diceRoll.add(dice1);
+		diceRoll.add(dice2);
+		controls.add(diceRoll);
 		/*
 		 * then make the drawing canvas, which is really just a boring old
 		 * JComponent with the paintComponent method overridden to paint
@@ -257,13 +201,6 @@ public abstract class GUI {
 		DefaultCaret caret = (DefaultCaret) textOutputArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-		/*
-		 * finally, make the outer JFrame and put it all together. this is more
-		 * complicated than it could be, as we put the drawing and text output
-		 * components inside a JSplitPane so they can be resized by the user.
-		 * the JScrollPane and the top bar are then added to the frame.
-		 */
-
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		split.setDividerSize(5); // make the selectable area smaller
 		split.setContinuousLayout(true); // make the panes resize nicely
@@ -274,7 +211,7 @@ public abstract class GUI {
 		split.setTopComponent(drawing);
 		split.setBottomComponent(scroll);
 
-		frame = new JFrame("Mapper");
+		frame = new JFrame("Cluedo");
 		// this makes the program actually quit when the frame's close button is
 		// pressed.
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
