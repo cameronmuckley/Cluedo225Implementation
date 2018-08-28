@@ -31,6 +31,8 @@ import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 
 public abstract class GUI {
+	
+	
 	public enum Direction {
 		UP, DOWN, RIGHT, LEFT
 	};
@@ -39,7 +41,7 @@ public abstract class GUI {
 
 	protected abstract void onClick(MouseEvent e);
 
-	protected abstract void onMove(Direction d);
+	protected abstract void makeMove(Board.Direction d);
 	
 	protected abstract void onInput();
 	
@@ -89,7 +91,7 @@ public abstract class GUI {
 		JButton west = new JButton("\u2190");
 		west.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				onMove(Direction.LEFT);
+				makeMove(Board.Direction.UP);
 				redraw();
 			}
 		});
@@ -97,7 +99,7 @@ public abstract class GUI {
 		JButton east = new JButton("\u2192");
 		east.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				onMove(Direction.RIGHT);
+				makeMove(Board.Direction.DOWN);
 				redraw();
 			}
 		});
@@ -105,7 +107,7 @@ public abstract class GUI {
 		JButton north = new JButton("\u2191");
 		north.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				onMove(Direction.UP);
+				makeMove(Board.Direction.LEFT);
 				redraw();
 			}
 		});
@@ -113,7 +115,7 @@ public abstract class GUI {
 		JButton south = new JButton("\u2193");
 		south.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				onMove(Direction.DOWN);
+				makeMove(Board.Direction.RIGHT);
 				redraw();
 			}
 		});
@@ -123,6 +125,7 @@ public abstract class GUI {
 		search.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				onInput();
+				redraw();
 			}
 		});
 

@@ -148,6 +148,7 @@ public class Board
 				  if(activeChar.contains(board[i][j])) {
 					  for(Player p : players) {
 						  if(p.getFromchar(activeChar.get(activeChar.indexOf(board[i][j])))!=null) {
+							  
 							  g.setColor(Color.YELLOW);
 							  g.fillRect((i*TILE_SIZE), (j*TILE_SIZE), TILE_SIZE, TILE_SIZE);
 							  g.setColor(Color.BLACK);
