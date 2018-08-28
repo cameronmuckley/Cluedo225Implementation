@@ -40,9 +40,17 @@ public abstract class GUI {
 	protected abstract void onClick(MouseEvent e);
 
 	protected abstract void onMove(Direction d);
+	
+	protected abstract void onInput();
+	
+	protected abstract void rollDice();
 
 	public JTextArea getTextOutputArea() {
 		return textOutputArea;
+	}
+	
+	public JTextField getSearchBox() {
+		return search;
 	}
 
 	public Dimension getDrawingAreaDimension() {
@@ -62,6 +70,7 @@ public abstract class GUI {
 	private JPanel controls;
 	private JComponent drawing; // we customise this to make it a drawing pane.
 	private JTextArea textOutputArea;
+	private JTextField search;
 
 	public GUI() {
 		initialise();
@@ -108,6 +117,14 @@ public abstract class GUI {
 				redraw();
 			}
 		});
+			
+		search = new JTextField(15);
+		search.setMaximumSize(new Dimension(0, 25));
+		search.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				onInput();
+			}
+		});
 
 		controls = new JPanel();
 		controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
@@ -136,6 +153,7 @@ public abstract class GUI {
 		navigation.add(south);
 		navigation.add(east);
 		controls.add(navigation);
+		controls.add(search);
 		controls.add(Box.createRigidArea(new Dimension(15, 0)));
 		// glue is another invisible component that grows to take up all the
 		// space it can on resize.
@@ -144,18 +162,13 @@ public abstract class GUI {
 		/*
 		 * Dice Component
 		 */		
-		JLabel dice1 = new JLabel();
-		BufferedImage wPic = ImageIO.read(this.getClass().getResource("snow.png"));
-		JLabel wIcon = new JLabel(new ImageIcon(wPic));
-		
-		JLabel dice2 = new JLabel();
-		dice2.setText("1");
-		
-		JPanel diceRoll = new JPanel();
-		diceRoll.setMaximumSize(new Dimension(50, 25));
-		diceRoll.setLayout(new GridLayout(1, 2));
-		diceRoll.add(dice1);
-		diceRoll.add(dice2);
+		JButton diceRoll = new JButton("Roll");
+		diceRoll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				System.out.println("Reached");
+				rollDice();
+			}
+		});
 		controls.add(diceRoll);
 		/*
 		 * then make the drawing canvas, which is really just a boring old

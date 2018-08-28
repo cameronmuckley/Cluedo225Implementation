@@ -11,6 +11,8 @@ public class Player
 	private List<Card> hand = new ArrayList<Card>();
 	private CluedoCharacter character;
 	private int number;
+	public boolean diceRolled = false;
+	public int turnMoves = 0;
 
 
   //------------------------

@@ -29,15 +29,11 @@ public class RuleSet
 
   }
 
-  public int setPlayers() {
-	  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	  try {
-		String s = br.readLine();
+  public int setPlayers(String str) {
+		String s = str;
 		// see of input is valid
 		for(char c : s.toCharArray()) {
 			if(!java.lang.Character.isDigit(c)) {
-				System.out.println("Invalid input, try again.");
-				br.close();
 				return 0;
 			}
 		}
@@ -45,13 +41,6 @@ public class RuleSet
 		if(i >=3 && i <=6) {
 			return i;
 		}
-		else {
-			System.out.println("Invalid number of players entered, try again.");
-		}
-
-	  } catch (IOException e) {
-		  e.printStackTrace();
-	  }
 	  return 0;
   }
 

@@ -1,6 +1,8 @@
 	import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class CluedoGame extends GUI
@@ -11,7 +13,7 @@ public class CluedoGame extends GUI
 	private RuleSet rules;
 	private List<Card> cards;
 	private List<Card> murderEnvelope;
-	private int numPlayers;
+	private int numPlayers = 0;
 	private List<Room> roomList;
 
 	// dice
@@ -23,6 +25,13 @@ public class CluedoGame extends GUI
   public CluedoGame()
   {
 	  // PREPARE GAME OBJECTS
+	  initalizeGame();
+	  // START GAME
+	  getTextOutputArea().setText("Welcome to Adrian and Cameron's implementation of Cluedo!\n");
+	  getTextOutputArea().append("How many of you are playing today? (Input a number between 3-6)\n");  
+  }
+  
+  public void initalizeGame() {
 	  board = new Board();
 	  players = new ArrayList<Player>();
 	  rules = new RuleSet();
@@ -90,18 +99,12 @@ public class CluedoGame extends GUI
 	  while(!characters.isEmpty()) {
 		  cards.add(characters.pop());
 	  }
-
-	  // START GAME
-	  getTextOutputArea().setText("Welcome to Adrian and Cameron's implementation of Cluedo!\n");
-	  // first set number of players
-	  getTextOutputArea().append("How many of you are playing today? (Input a number between 3-6)\n");
-	  // number of players is set at 0 by default and invalid input returns 0.
-	  while(numPlayers == 0) {
-		  numPlayers = rules.setPlayers();
-	  }
-	  getTextOutputArea().setText("Great, you've selected " + numPlayers + " players./n");
+  }
+  
+  public void playGame() {	
+	getTextOutputArea().setText("Great, you've selected " + numPlayers + " players./n");
 	  rules.setNumPlayers(numPlayers);
-	  // create players character tokens
+	// create players character tokens
 	  Stack<Card> tokens = new Stack<Card>();
 	  tokens.add(new CluedoCharacter("Miss Scarlet",'4'));
 	  tokens.add(new CluedoCharacter("Colonel Mustard",'5'));
@@ -128,11 +131,8 @@ public class CluedoGame extends GUI
 			  count = 0;
 		  }
 	  }
-
-	  // now that we have players, cards in hands, a board and murder circumstances, begin the main game loop.
 	  // MAIN GAME LOOP
-	  while(!rules.isGamewon()) {
-		  String murderAnswer = "";
+	  		String murderAnswer = "";
 		  for(Card mur : murderEnvelope) {
 			  murderAnswer += mur.getName();
 		  }
@@ -141,58 +141,75 @@ public class CluedoGame extends GUI
 		  // TODO can player move
 		  getTextOutputArea().setText("It's player "+ rules.getTurn() + ", " + players.get(rules.getTurn()-1).getName() + "'s turn. /n");
 		  getTextOutputArea().append("Cards in Player " + rules.getTurn() + "'s hand: " + players.get(rules.getTurn()-1).getHandString() + "/n");
-		  getTextOutputArea().append("Rolling dice...../n");
-		  die1 = (int) (Math.random()*6)+1;
-		  die2 = (int) (Math.random()*6)+1;
-		  int turnMoves = die1 + die2;
-		  getTextOutputArea().append("Player " + rules.getTurn() + " rolled " + (turnMoves) + "/n");
+		  getTextOutputArea().append("Roll the dice/n");
 
 		  //TODO move character
-		  while(turnMoves != 0) {
-			  getTextOutputArea().setText("You have: " + turnMoves + " remaining /n");
-			  getTextOutputArea().append("Which direction would you like to go? /n");
-			  board.moveCharacter(players.get(rules.getTurn()-1).getChar(), rules.getDirection());
-			  //TODO check if character is in a room
-			  for(Room r : roomList) {
-				  if(players.get(rules.getTurn()-1).getChar().getCurrentTile() == r.getLetter()) {
-					  getTextOutputArea().setText("Would you like to make an Accusation? If not you will Suggest. /n");
-					  if(rules.playerAccChoice()) {
-						  List<Card> accusation = new ArrayList<Card>();
-						  accusation = rules.makeAccusation(players, r);
-						  int winCount = 0;
-						  int envCount = 0;
-						  for(Card winC : accusation) {
-							  if(winC.getName().equals(murderEnvelope.get(envCount).getName())) {
-								  winCount++;
-							  }
-							  envCount++;
+		 
+}
+	  
+@Override
+protected void  rollDice() {
+	if(!players.get(rules.getTurn()-1).diceRolled) {
+		die1 = (int) (Math.random()*6)+1;
+		die2 = (int) (Math.random()*6)+1;
+		players.get(rules.getTurn()-1).diceRolled = true;
+		players.get(rules.getTurn()-1).turnMoves = die1 + die2;
+		getTextOutputArea().append("Player " + rules.getTurn() + " rolled " + (players.get(rules.getTurn()-1).turnMoves) + "/n");
+	}
+	else {
+		getTextOutputArea().append("Player already rolled");
+	}
+}
+  
+protected void makeMove(Board.Direction dir) {
+	if(players.get(rules.getTurn()-1).turnMoves == 0) {
+		getTextOutputArea().append("Please roll the dice");
+	}
+	 while(players.get(rules.getTurn()-1).turnMoves != 0) {
+		  getTextOutputArea().setText("You have: " + players.get(rules.getTurn()-1).turnMoves + " remaining /n");
+		  getTextOutputArea().append("Which direction would you like to go? /n");
+		  board.moveCharacter(players.get(rules.getTurn()-1).getChar(), dir);
+		  //TODO check if character is in a room
+		  /*for(Room r : roomList) {
+			  if(players.get(rules.getTurn()-1).getChar().getCurrentTile() == r.getLetter()) {
+				  getTextOutputArea().setText("Would you like to make an Accusation? If not you will Suggest. /n");
+				  if(rules.playerAccChoice()) {
+					  List<Card> accusation = new ArrayList<Card>();
+					  accusation = rules.makeAccusation(players, r);
+					  int winCount = 0;
+					  int envCount = 0;
+					  for(Card winC : accusation) {
+						  if(winC.getName().equals(murderEnvelope.get(envCount).getName())) {
+							  winCount++;
 						  }
-						  if(winCount == 3) {
-							  getTextOutputArea().setText("Player " + players.get(rules.getTurn()-1).getNumber() + " wins! /n");
-							  rules.setGamewon();  
-						  }	  
-						  else {
-							  getTextOutputArea().setText("That was wrong!");
-						  }
+						  envCount++;
 					  }
+					  if(winCount == 3) {
+						  getTextOutputArea().setText("Player " + players.get(rules.getTurn()-1).getNumber() + " wins! /n");
+						  rules.setGamewon();  
+					  }	  
 					  else {
-						  rules.makeSuggestion(players,r);
+						  getTextOutputArea().setText("That was wrong!");
 					  }
-					  
-					  turnMoves = 1;
 				  }
+				  else {
+					  rules.makeSuggestion(players,r);
+				  }
+				  
+				  turnMoves = 1;
 			  }
-			  turnMoves--;
-		  }
-		  try {
-			Thread.sleep(2000);
-		  } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		  }
-		  rules.passTurn();
+		  }*/
+		  players.get(rules.getTurn()-1).turnMoves--;
 	  }
-  }
+	  try {
+		Thread.sleep(2000);
+	  } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	  }
+	  players.get(rules.getTurn()-1).diceRolled = false;
+	  rules.passTurn();
+ }
 
 @Override
 protected void redraw(Graphics g) {
@@ -215,7 +232,18 @@ protected void onMove(Direction d) {
 	
 }
 
-public static void main(String[] args) {
-		new CluedoGame();
+@Override
+protected void onInput() {
+	if(numPlayers == 0) {
+		int tempNum = rules.setPlayers(getSearchBox().getText());
+		if(tempNum != 0) {
+			numPlayers = tempNum;
+			playGame();
+		}
 	}
+}
+
+public static void main(String[] args) {
+	new CluedoGame();
+}
 }
