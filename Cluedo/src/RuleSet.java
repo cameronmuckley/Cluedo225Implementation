@@ -28,7 +28,11 @@ public class RuleSet
   {
 
   }
-
+  /**
+   * sets number of players in the game to the supplied input.
+   * @param str
+   * @return
+   */
   public int setPlayers(String str) {
 		String s = str;
 		// see of input is valid
@@ -82,18 +86,35 @@ public class RuleSet
 		  playersTurn = 1;
 	  }
   }
+  
+  /**
+   * returns current player's turn.
+   * @return
+   */
 
   public int getTurn() {
 	  return playersTurn;
   }
+  
+  /**
+   * returns gamewon boolean.
+   * @return
+   */
 
   public boolean isGamewon() {
 	  return gameWon;
   }
-  
+  /**
+   * sets gamewon boolean.
+   */
   public void setGamewon() {
 	  gameWon = true;
   }
+  
+  /**
+   * sets number of players.
+   * @param i
+   */
 
   public void setNumPlayers(int i) {
 	  numberPlayers = i;

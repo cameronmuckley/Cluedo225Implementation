@@ -1,3 +1,7 @@
+/**
+ * Represents a character card.
+ */
+
 public class Room extends Card
 {
 

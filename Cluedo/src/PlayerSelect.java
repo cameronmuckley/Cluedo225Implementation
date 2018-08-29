@@ -13,11 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
+/**
+ *  Provides a dialog box for selecting a character.
+*/
 public class PlayerSelect extends JDialog implements ActionListener {
-  /**
-	 * 
-	 */
+ 
 	private static final long serialVersionUID = 1L;
 /**
 	 * 

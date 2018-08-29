@@ -16,7 +16,7 @@ import javax.swing.JRadioButton;
 
 public class Accusation extends JDialog implements ActionListener {
   /**
-	 * 
+	 * This class provides a dialog window for the user to suggest murder circumstances.
 	 */
 	ButtonGroup weaponsGroup;
 	ButtonGroup peopleGroup;
@@ -70,13 +70,20 @@ public Accusation(JFrame parent, String title) {
     pack(); 
     setVisible(true);
   }
-
+  /**
+   * Returns the the names of the selected weapon and person.
+   * @return
+   */
   public String[] getAccusations() {
 	  String[] s = new String[2];
 	  s[0] = getWeapon();
 	  s[1] = getPerson();
 	  return s;
   }
+  /**
+   * Adds radio buttons to the frame for the different weapons.
+   * @return
+   */
   
   private String getWeapon() {
 	for (Enumeration<AbstractButton> buttons = weaponsGroup.getElements(); buttons.hasMoreElements();) {
@@ -89,6 +96,11 @@ public Accusation(JFrame parent, String title) {
 	return null;
   }
   
+  /**
+   * Adds radio buttons to the frame for the different characters.
+   * @return
+   */
+  
   private String getPerson() {
 	  for (Enumeration<AbstractButton> buttons = peopleGroup.getElements(); buttons.hasMoreElements();) {
           AbstractButton button = buttons.nextElement();
@@ -99,6 +111,10 @@ public Accusation(JFrame parent, String title) {
       }
 	return null;
   }
+  
+  /**
+   * removes dialog box from display.
+   */
 
   @Override
   public void actionPerformed(ActionEvent e) {

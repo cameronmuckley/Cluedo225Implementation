@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a player in the game.
+ * Carries assosciated relevant information.
+ */
+
 public class Player
 {
 

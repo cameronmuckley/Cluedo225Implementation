@@ -1,7 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.*;
-
+/**
+ * This class represents the board in the game. 
+ * It manages position data, as well as draws the board.
+ *
+ */
 public class Board
 {
 
@@ -69,7 +73,11 @@ public class Board
   //------------------------
   // INTERFACE
   //------------------------
-
+  /**
+   * takes inputted movement data and adjusts character position accordingly.
+   * @param c
+   * @param d
+   */
   public void moveCharacter(CluedoCharacter c, Direction d) {
 	  for(int i=0; i < BOARD_HEIGHT; i++) {
 		  for(int j=0; j < BOARD_WIDTH; j++) {
@@ -126,6 +134,12 @@ public class Board
 		  }
 	  }
   }
+  
+  /**
+   * draws the board to the JFrame.
+   * @param g
+   * @param players
+   */
 
   public void draw(Graphics g,List<Player> players) {
 	  List<Character> activeChar = new ArrayList<Character>();

@@ -6,6 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 
+/**
+ * the main game class. All other classes are handled and instantiated here.
+ * It's an extension of the GUI class.
+ */
 
 public class CluedoGame extends GUI
 {
@@ -132,8 +136,7 @@ public class CluedoGame extends GUI
 		  getTextOutputArea().append("Cards in Player " + rules.getTurn() + "'s hand: " + players.get(rules.getTurn()-1).getHandString() + "\n");
 		  getTextOutputArea().append("Roll the dice\n");
 
-		  //TODO move character
-		 
+		  //TODO move character		 
 }
 	  
 @Override
@@ -191,6 +194,10 @@ public void makeAccusation(Room r) {
 	}
 }
 
+/**
+ * draws the game board.
+ */
+
 @Override
 protected void redraw(Graphics g) {
 	board.draw(g,players);
@@ -203,6 +210,10 @@ protected void onClick(MouseEvent e) {
 	// TODO Auto-generated method stub
 	
 }
+
+/** 
+ * handles initial player input.
+ */
 
 @Override
 protected void onInput() {

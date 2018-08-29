@@ -31,12 +31,16 @@ import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 
 public abstract class GUI {
-	
-	
+	/**
+	 * The GUI class, which is extended and used by the main game class.	
+	 * This is a chopped up version of supplied GUI code from another course.
+	 *
+	 */
 	public enum Direction {
 		UP, DOWN, RIGHT, LEFT
 	};
-
+	
+// abstract methods implemented by the main class.
 	protected abstract void redraw(Graphics g);
 
 	protected abstract void onClick(MouseEvent e);
@@ -241,4 +245,3 @@ public abstract class GUI {
 	}
 }
 
-// code for COMP261 assignments

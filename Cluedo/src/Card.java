@@ -1,14 +1,12 @@
 import java.util.*;
 
+/**
+ * Superclass for card objects, essentially an abstract class.
+ *
+ */
+
 public class Card
 {
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-	
-  
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
