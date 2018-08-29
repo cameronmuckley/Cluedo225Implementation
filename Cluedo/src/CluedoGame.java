@@ -192,6 +192,7 @@ public void makeAccusation(Room r) {
 	for(Card c : accusationEnvelope) {
 		getTextOutputArea().append(c.getName() + "\n");
 	}
+	getTextOutputArea().append("Next player roll the dice. \n");
 }
 
 /**

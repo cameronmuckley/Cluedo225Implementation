@@ -11,16 +11,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -72,19 +77,20 @@ public abstract class GUI {
 	private static final int TEXT_OUTPUT_ROWS = 5;
 
 	private JFrame frame;
-
+	
+	private JMenuBar menubar;
 	private JPanel controls;
 	private JComponent drawing; // we customise this to make it a drawing pane.
 	private JTextArea textOutputArea;
 	private JTextField search;
-
+	
 	public GUI() {
 		initialise();
 	}
 
 	@SuppressWarnings("serial")
 	private void initialise() {
-
+		
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -234,6 +240,24 @@ public abstract class GUI {
 		frame = new JFrame("Cluedo");
 		// this makes the program actually quit when the frame's close button is
 		// pressed.
+		//Placeholder, showing the potential use of a menu
+		menubar = new JMenuBar();
+				
+		JMenu menuFile = new JMenu("File");
+		JMenuItem menuOpen = new JMenuItem("Open");
+		JMenuItem menuSave = new JMenuItem("Save");
+		JMenuItem menuSaveAs = new JMenuItem("Save As");
+		
+		JMenu menuGame = new JMenu("Game");
+
+		menuFile.add(menuOpen);
+		menuFile.add(menuSave);
+		menuFile.add(menuSaveAs);
+		
+		menubar.add(menuFile);
+		menubar.add(menuGame);
+		
+		frame.setJMenuBar(menubar);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(controls, BorderLayout.NORTH);
